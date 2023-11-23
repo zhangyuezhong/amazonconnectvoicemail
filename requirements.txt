@@ -1,0 +1,4 @@
+openai-whisper
+ebmlite
+requests
+python-dotenv

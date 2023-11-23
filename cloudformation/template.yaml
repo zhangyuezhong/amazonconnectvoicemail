@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: AWS CloudFormation Template for Amazon Connect Voicemail solution
+Parameters:
+  Prefix:
+    Type: String
+    Description: Prefix for the resource name
+
+  OutputS3BucketName:
+    Type: String
+    Description: OutputS3BucketName for wav file
+
+  OutputS3KeyPrefix:
+    Type: String
+    Description: OutputS3KeyPrefix for wav file
+
+  OutputS3PresignedUrlExpiresIn:
+    Type: String
+    Description: OutputS3PresignedUrlExpiresIn for wav file
+    Default: "1 week"
+    AllowedValues:
+      - 30 minutes
+      - 1 hour
+      - 3 hours
+      - 1 day
+      - 3 days
+      - 1 week
+      - 2 weeks
+      - 1 month
+      - 2 months
+  FromEmail:
+    Type: String
+    Description: FromEmail for wav file
+    Default: ""
+  ToEmail:
+    Type: String
+    Description: ToEmail for wav file
+    Default: ""
+  TeamsChannelWebHookUrl:
+    Type: String
+    Description: TeamsChannelWebHookUrl for wav file
+    Default: ""
+  ImageUri:
+    Type: String
+    Description: Code  ImageUri
+
+  WhisperDownloadRoot:
+    Type: String
+    Description: WhisperDownloadRoot
+  WhisperModelName:
+    Type: String
+    Description: the name of model to use.
+    Default: base.en
+    AllowedValues:
+      - tiny.en
+      - base.en
+      - small.en
+      - medium.en
+
+  WhisperPreloadModelInMemory:
+    Type: String
+    Description: WhisperPreloadModelInMemory
+    Default: "True"
+    AllowedValues:
+      - "True"
+      - "False"
+
+Resources:
+  VoicemailLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${Prefix}-voicemail-lambda"
+      Description: Lambda function for Amazon Connect voicemail
+      Code:
+        ImageUri: !Ref ImageUri
+      PackageType: Image
+      Role: !GetAtt VoicemailLambdaRole.Arn
+      Timeout: 240
+      MemorySize: 3072
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          OUTPUT_S3_BUCKET_NAME: !Ref OutputS3BucketName
+          OUTPUT_S3_KEY_PREFIX: !Ref OutputS3KeyPrefix
+          OUTPUT_S3_PRESIGNED_URL_EXPIRES_IN: !Ref OutputS3PresignedUrlExpiresIn
+          WHISPER_DOWNLOAD_ROOT: !Ref WhisperDownloadRoot
+          WHISPER_MODEL_NAME: !Ref WhisperModelName
+          WHISPER_PRELOAD_MODEL_IN_MEMORY: !Ref WhisperPreloadModelInMemory
+          FROM_EMAIL: !Ref FromEmail
+          TO_EMAIL: !Ref ToEmail
+          TEAMS_CHANNEL_WEBHOOK: !Ref TeamsChannelWebHookUrl
+
+  VoicemailLambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${Prefix}-voicemail-lambda"
+      RetentionInDays: 7
+
+  VoicemailLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${Prefix}-voicemail-lambda-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonKinesisReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonKinesisVideoStreamsReadOnlyAccess
+      Policies:
+        - PolicyName: !Sub "${Prefix}-voicemail-lambda-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - !GetAtt "VoicemailLambdaLogGroup.Arn"
+              - Effect: "Allow"
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendTemplatedEmail
+                Resource:
+                  - !Sub "arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/*"
+                  - !Sub "arn:aws:ses:${AWS::Region}:${AWS::AccountId}:template/*"
+              - Effect: Allow
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub "arn:aws:s3:::${OutputS3BucketName}/*"
+                  - !Sub "arn:aws:s3:::${OutputS3BucketName}"

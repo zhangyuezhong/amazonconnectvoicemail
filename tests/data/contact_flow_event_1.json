@@ -1,0 +1,58 @@
+{
+    "Details": {
+        "ContactData": {
+            "Attributes": {
+                "user_userAttributes_FirstName": "Luke",
+                "user_userAttributes_DateOfBirth": "12101986",
+                "user_userAttributes_OverdueAmount": "256",
+                "user_userAttributes_AccountNumber": "45684594"
+            },
+            "AwsRegion": "ap-southeast-2",
+            "Channel": "VOICE",
+            "ContactId": "3f3eaf31-469a-4a5d-bb75-11a98711bc6b",
+            "CustomerEndpoint": {
+                "Address": "+61417974757",
+                "Type": "TELEPHONE_NUMBER"
+            },
+            "CustomerId": null,
+            "Description": null,
+            "InitialContactId": "3f3eaf31-469a-4a5d-bb75-11a98711bc6b",
+            "InitiationMethod": "INBOUND",
+            "InstanceARN": "arn:aws:connect:ap-southeast-2:902063749931:instance/bb444481-cdfd-4dd0-b993-c6375893b738",
+            "LanguageCode": "en-AU",
+            "MediaStreams": {
+                "Customer": {
+                    "Audio": {
+                        "StartFragmentNumber": "91343852333181432392682062658373325707156691028",
+                        "StartTimestamp": "1700461342358",
+                        "StreamARN": "arn:aws:kinesisvideo:ap-southeast-2:902063749931:stream/kvs-connect-algdemo-contact-59d77211-43f9-439a-8819-759755df9f95/1699500071633"
+                    }
+                }
+            },
+            "Name": null,
+            "PreviousContactId": "3f3eaf31-469a-4a5d-bb75-11a98711bc6b",
+            "Queue": {
+                "ARN": "arn:aws:connect:ap-southeast-2:902063749931:instance/bb444481-cdfd-4dd0-b993-c6375893b738/queue/0791356d-b9f4-4e94-a720-17fbc22bc88e",
+                "Name": "BasicQueue",
+                "OutboundCallerId": {
+                    "Address": "+61283360605",
+                    "Type": "TELEPHONE_NUMBER"
+                }
+            },
+            "References": {},
+            "RelatedContactId": null,
+            "SegmentAttributes": {
+                "connect:Subtype": {
+                    "ValueString": "connect:Telephony"
+                }
+            },
+            "SystemEndpoint": {
+                "Address": "+61370439098",
+                "Type": "TELEPHONE_NUMBER"
+            }
+        },
+        "Parameters": {}
+    },
+    "Name": "ContactFlowEvent",
+    "InvocationType" :"Event"
+}
