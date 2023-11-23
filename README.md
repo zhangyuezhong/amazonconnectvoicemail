@@ -4,7 +4,7 @@
 
 ## Overview
 
-This project enables you to add a voicemail feature to your Amazon Connect contact center. If a call comes in after business hours, it can be routed to a custom call flow that activates Media Streaming for the customer, allowing them to record a voicemail message. The voicemail message is then transcribed using OpenAI Whisper (opensource), and the transcription is sent via email along with a link to download the audio message. Additionally, notifications can be sent to a Team channel to keep the team informed.
+This project enables you to add a voicemail feature to your Amazon Connect contact center. If a call comes in after business hours, it can be routed to a custom call flow that activates Media Streaming for the customer, allowing them to record a voicemail message. The voicemail message is then transcribed using [OpenAI Whisper](https://github.com/openai/whisper/tree/main/whisper)  (opensource), and the transcription is sent via email along with a link to download the audio message. Additionally, notifications can be sent to a Team channel to keep the team informed.
 
 ## Deployment Steps
 
@@ -48,6 +48,7 @@ Create an Amazon Simple Email Service (SES) identity for sending out emails. Thi
 ### 6. Create Teams Inbound Message Hook
 
 Create a channel inbound message hook for Teams to enable notifications. Obtain the webhook URL and update the CloudFormation stack parameters.
+[Create Incoming Webhooks](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=dotnet)
 
 ## Usage
 
