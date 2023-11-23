@@ -12,27 +12,26 @@ This project enables you to add a voicemail feature to your Amazon Connect conta
 
 Clone this repository to your local machine:
 
-bashCopy code
 
-`git clone https://github.com/zhangyuezhong/amazonconnectvoicemail.git
-cd amazonconnectvoicemail` 
+
+`	git clone https://github.com/zhangyuezhong/amazonconnectvoicemail.git
+	cd amazonconnectvoicemail` 
 
 ### 2. Build Docker Image
 
 Build a Docker image with the provided Dockerfile. This image will package the code, OpenAI Whisper, and FFMpeg:
 
-
-`docker build -t amazonconnectvoicemail:latest .` 
+`	docker build -t amazonconnectvoicemail:latest .` 
 
 ### 3. Upload Docker Image to AWS ECR
 
 Upload the Docker image to your AWS Elastic Container Registry (ECR) repository. Replace `your-ecr-repository-uri` with the URI of your ECR repository:
 
-bashCopy code
+	
 
-`aws ecr get-login-password --region your-region | docker login --username AWS --password-stdin your-ecr-repository-uri
-docker tag amazonconnectvoicemail:latest your-ecr-repository-uri:latest
-docker push your-ecr-repository-uri:latest` 
+`	aws ecr get-login-password --region your-region | docker login --username AWS --password-stdin your-ecr-repository-uri
+	docker tag amazonconnectvoicemail:latest your-ecr-repository-uri:latest
+	docker push your-ecr-repository-uri:latest` 
 
 ### 4. Deploy CloudFormation Template
 
