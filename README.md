@@ -14,7 +14,7 @@ Clone this repository to your local machine:
 
 bashCopy code
 
-`git clone https://github.com/your-username/amazonconnectvoicemail.git
+`git clone https://github.com/zhangyuezhong/amazonconnectvoicemail.git
 cd amazonconnectvoicemail` 
 
 ### 2. Build Docker Image
